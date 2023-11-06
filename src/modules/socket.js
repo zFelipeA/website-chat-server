@@ -4,8 +4,10 @@ import { randomUUID } from "node:crypto";
 
 export default class Socket {
     constructor() {
+        this.port = process.env.PORT || 3000;
+
         this.wss = new WebSocketServer({
-            port: 3000,
+            port: this.port,
             perMessageDeflate: false,
         });
 
@@ -172,6 +174,7 @@ export default class Socket {
     };
 
     onSocketConnection = (socket, req) => {
+        console.log("conect");
         try {
             const originURL = new Headers(req.headers).get("origin");
             const params = new URL(`${originURL}${req.url}`).searchParams;
@@ -183,7 +186,6 @@ export default class Socket {
             }
 
             if (lobby === "global") {
-                console.log("conect");
                 return this.setupSocket(socket, name, avatar, "global");
             }
 
@@ -205,6 +207,6 @@ export default class Socket {
 
     init = () => {
         this.wss.on("connection", this.onSocketConnection);
-        console.log("[CHAT-SERVER] - SUCCESS - Socket is running");
+        console.log(`[CHAT-SERVER] - SUCCESS - Socket is running in ${this.port}`);
     };
 }
