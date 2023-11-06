@@ -120,7 +120,6 @@ export default class Socket {
     };
 
     setupSocket = (socket, name, avatar, channel) => {
-        console.log("aqui");
         const id = randomUUID();
         const lobby = this.lobby[channel];
         socket.id = id;
@@ -176,13 +175,10 @@ export default class Socket {
 
     onSocketConnection = (socket, req) => {
         try {
-            const originURL = new Headers(req.headers).get("origin");
-            const params = new URL(`${originURL}${req.url}`).searchParams;
+            const params = new URL(`${req.headers.origin}${req.url}`).searchParams;
             const name = params.get("name");
             const lobby = params.get("lobby");
             const avatar = params.get("avatar");
-
-            console.log("conect", name, lobby, avatar);
             if (!name || !lobby || !avatar) {
                 return socket.close();
             }
@@ -202,8 +198,7 @@ export default class Socket {
             }
 
             return this.setupSocket(socket, name, avatar, lobby);
-        } catch (error) {
-            console.log(error);
+        } catch {
             return socket.close();
         }
     };
