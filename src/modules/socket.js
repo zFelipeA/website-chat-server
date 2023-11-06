@@ -202,7 +202,8 @@ export default class Socket {
             }
 
             return this.setupSocket(socket, name, avatar, lobby);
-        } catch {
+        } catch (error) {
+            console.log(error);
             return socket.close();
         }
     };
