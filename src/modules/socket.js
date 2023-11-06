@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 
 export default class Socket {
     constructor() {
-        this.port = process.env.PORT || 3000;
+        this.port = process.env.PORT || 80;
 
         this.wss = new WebSocketServer({
             port: this.port,
@@ -120,6 +120,7 @@ export default class Socket {
     };
 
     setupSocket = (socket, name, avatar, channel) => {
+        console.log("aqui");
         const id = randomUUID();
         const lobby = this.lobby[channel];
         socket.id = id;
@@ -174,13 +175,14 @@ export default class Socket {
     };
 
     onSocketConnection = (socket, req) => {
-        console.log("conect");
         try {
             const originURL = new Headers(req.headers).get("origin");
             const params = new URL(`${originURL}${req.url}`).searchParams;
             const name = params.get("name");
             const lobby = params.get("lobby");
             const avatar = params.get("avatar");
+
+            console.log("conect", name, lobby, avatar);
             if (!name || !lobby || !avatar) {
                 return socket.close();
             }
