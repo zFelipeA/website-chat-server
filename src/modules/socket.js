@@ -5,7 +5,7 @@ import { randomUUID } from "node:crypto";
 export default class Socket {
     constructor() {
         this.wss = new WebSocketServer({
-            port: 80,
+            port: 3000,
             perMessageDeflate: false,
         });
 
@@ -183,6 +183,7 @@ export default class Socket {
             }
 
             if (lobby === "global") {
+                console.log("conect");
                 return this.setupSocket(socket, name, avatar, "global");
             }
 
